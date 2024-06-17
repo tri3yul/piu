@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('username');
-            $table->string('role_as', 25); // admin, user
+            $table->string('role_as', 25)->default('user'); // admin, user
             $table->string('cover_path', 1024)->nullable();
             $table->string('avatar_path', 1024)->nullable();
         });
