@@ -10,7 +10,7 @@ import FollowingListItem from '@/Components/app/FollowingListItem.vue';
             <Disclosure v-slot="{ open }">
                 <DisclosureButton class="w-full">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-bold">My Foolowings</h2>
+                        <h2 class="text-xl font-bold">My Followings</h2>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             class="size-6 transition-all" :class="open ? 'rotate-90 transform' : ''">
                             <path fill-rule="evenodd"
