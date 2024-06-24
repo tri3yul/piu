@@ -5,7 +5,6 @@ import InputTextArea from '@/Components/InputTextArea.vue';
 import PostModal from '@/Components/app/PostModal.vue'
 
 const authUser = usePage().props.auth.user;
-console.log(authUser);
 
 const showModal = ref(false);
 const newPost = ref({
