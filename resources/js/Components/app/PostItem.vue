@@ -1,7 +1,8 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
-import { ChevronDownIcon, PencilIcon, TrashIcon, EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon, PencilIcon, TrashIcon, EllipsisVerticalIcon, } from '@heroicons/vue/20/solid'
+import { ChatBubbleOvalLeftIcon, HandThumbUpIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import PostModal from '@/Components/app/PostModal.vue'
 import PostUserHeader from '@/Components/app/PostUserHeader.vue';
 import { ref } from 'vue'
@@ -37,36 +38,34 @@ function deletePost() {
                 <div>
                     <MenuButton
                         class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center">
-                        <EllipsisVerticalIcon class="w-5 h-5"
-                            aria-hidden="true" />
+                        <EllipsisVerticalIcon class="w-5 h-5" aria-hidden="true" />
                     </MenuButton>
                 </div>
 
                 <transition enter-active-class="transition duration-100 ease-out"
                     enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
                     leave-active-class="transition duration-75 ease-in"
-                    leave-from-class="transform scale-100 opacity-100"
-                    leave-to-class="transform scale-95 opacity-0">
+                    leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
                     <MenuItems
                         class="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                         <div class="px-1 py-1">
                             <MenuItem v-slot="{ active }">
-                                <button @click="openEditModal" :class="[
+                            <button @click="openEditModal" :class="[
                                     active ? 'bg-blue-500 text-white' : 'text-gray-900',
                                     'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                                 ]">
-                                    <PencilIcon class="mr-2 h-5 w-5" aria-hidden="true" />
-                                    Edit
-                                </button>
+                                <PencilIcon class="mr-2 h-5 w-5" aria-hidden="true" />
+                                Edit
+                            </button>
                             </MenuItem>
                             <MenuItem v-slot="{ active }">
-                                <button @click="deletePost" :class="[
+                            <button @click="deletePost" :class="[
                                     active ? 'bg-blue-500 text-white' : 'text-gray-900',
                                     'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                                 ]">
-                                    <TrashIcon class="mr-2 h-5 w-5" aria-hidden="true" />
-                                    Delete
-                                </button>
+                                <TrashIcon class="mr-2 h-5 w-5" aria-hidden="true" />
+                                Delete
+                            </button>
                             </MenuItem>
                         </div>
                     </MenuItems>
@@ -88,20 +87,27 @@ function deletePost() {
                 </template>
             </Disclosure>
         </div>
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-            <template v-for="attachment of post.attachments">
+        <div
+            class="grid gap-3 mb-3"
+            :class="[
+                post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+            ]">
+            <template v-for="(attachment, ind) of post.attachments.slice(0, 4)">
                 <div
                     class="group aspect-square bg-gray-100 flex flex-col items-center justify-center text-gray-500 relative">
+
+                    <div v-if="ind === 3"
+                        class="absolute left-0 top-0 right-0 bottom-0 z-10 bg-black/60 text-white flex items-center justify-center text-2xl">
+                        +{{ post.attachments.length - 4 }} more
+                    </div>
+
                     <button
-                        class="opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-blue-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-blue-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-                            <path fill-rule="evenodd"
-                                d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z"
-                                clip-rule="evenodd" />
-                        </svg>
+                        class="z-20 opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-blue-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-blue-800">
+                        <ArrowDownTrayIcon class="size-4" />
                     </button>
 
-                    <img v-if="isImage(attachment)" :src="attachment.url" class="object-cover aspect-square" />
+                    <img v-if="isImage(attachment)" :src="attachment.url"
+                        class="object-contain aspect-square" />
                     <template v-else>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-12">
                             <path
@@ -118,19 +124,12 @@ function deletePost() {
         <div class="flex gap-2">
             <button
                 class="text-gray-800 flex gap-1 items-center justify-center bg-blue-100 rounded-lg hover:bg-blue-200 py-2 px-4 flex-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                    <path
-                        d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
-                </svg>
+                <HandThumbUpIcon class="size-5 mr-2" />
                 Like
             </button>
             <button
                 class="text-gray-800 flex gap-1 items-center justify-center bg-blue-100 rounded-lg hover:bg-blue-200 py-2 px-4 flex-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                    <path fill-rule="evenodd"
-                        d="M5.337 21.718a6.707 6.707 0 0 1-.533-.074.75.75 0 0 1-.44-1.223 3.73 3.73 0 0 0 .814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 0 1-4.246.997Z"
-                        clip-rule="evenodd" />
-                </svg>
+                <ChatBubbleOvalLeftIcon class="size-5 mr-2" />
 
                 Comment
             </button>

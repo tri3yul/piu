@@ -22,7 +22,7 @@ class PostResource extends JsonResource
             'updated_at' => Carbon::parse($this->updated_at)->timezone('Asia/Jakarta')->format('Y-m-d H:i:s'),
             'user' => new UserResource($this->user),
             'group' => $this->group,
-            'attachments' => $this->attachments,
+            'attachments' => PostAttachmentResource::collection($this->attachments),
         ];
     }
 }
