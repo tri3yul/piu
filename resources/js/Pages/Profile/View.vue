@@ -64,7 +64,7 @@ function cancelCoverImage () {
     coverImageSrc.value = null;
 }
 
-function cancelAvatarImage () {
+function resetAvatarImage () {
     imageForm.avatar = null;
     avatarImageSrc.value = null;
 }
@@ -85,7 +85,7 @@ function submitAvatarImage () {
     imageForm.post(route('profile.updateImages'), {
         onSuccess: (user) => {
             console.log(user)
-            cancelAvatarImage()
+            resetAvatarImage()
             setTimeout(() => {
                 showNotification.value = false
             }, 3000)
@@ -139,7 +139,9 @@ function submitAvatarImage () {
                     </div>
                 </div>
                 <div class="flex">
-                    <div class="flex items-center justify-center relative group/avatar ml-[48px] -mt-[64px] w-[128px] h-[128px] rounded-full">
+                    <div
+                        class="flex items-center justify-center relative group/avatar ml-[48px] -mt-[64px] w-[128px] h-[128px] rounded-full"
+                    >
                         <img :src="avatarImageSrc || user.avatar_url || '/img/avatar-1.webp'"
                             class="w-full h-full object-cover rounded-full" />
                         <button v-if="!avatarImageSrc"
@@ -149,8 +151,9 @@ function submitAvatarImage () {
                             <input type="file" class="absolute left-0 top-0 bottom-0 right-0 opacity-0"
                                 @change="onAvatarChange" />
                         </button>
-                        <div v-else class="absolute top-1 right-0 flex flex-col gap-2">
-                            <button @click="cancelAvatarImage"
+                        <div v-else
+                            class="absolute top-1 right-0 flex flex-col gap-2">
+                            <button @click="resetAvatarImage"
                                 class="size-7 flex items-center justify-center bg-red-500/80 text-white rounded-full">
                                 <XMarkIcon class="size-3" />
 
