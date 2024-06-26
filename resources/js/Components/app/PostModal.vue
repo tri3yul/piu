@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle, } from '@headlessui/vue'
 import { XMarkIcon, PaperClipIcon, BookmarkIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/solid';
 import PostUserHeader from '@/Components/app/PostUserHeader.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { isImage } from '@/helpers';
 
@@ -20,7 +20,19 @@ const props = defineProps({
     modelValue: Boolean
 })
 
+const attachmentExtensions = usePage().props.attachmentExtensions;
+
+/**
+ * {
+ *      file: File,
+ *      url: '',
+ *}
+ * @type {Ref<UnwrapRef<*[]>>}
+ */
+
 const attachmentFiles = ref([])
+const attachmentError = ref([])
+const showExtensionsText = ref(false)
 
 const form = useForm({
     body: '',
@@ -53,6 +65,8 @@ function closeModal() {
 function resetModal() {
     form.reset()
     attachmentFiles.value = []
+    showExtensionsText.value = false;
+    attachmentError.value = [];
     if (props.post.attachments) {
         props.post.attachments.forEach(file => file.deleted = false)
     }
@@ -66,6 +80,9 @@ function submit() {
             preserveScroll: true,
             onSuccess: (res) => {
                 closeModal();
+            },
+            onError: (errors) => {
+                processError(errors)
             }
         })
     } else {
@@ -73,13 +90,34 @@ function submit() {
             preserveScroll: true,
             onSuccess: (res) => {
                 closeModal();
+            },
+            onError: (errors) => {
+                processError(errors)
             }
+
         })
     }
 }
 
+function processError(errors) {
+    for (const key in errors) {
+        if (key.includes('.')) {
+            const [, index] = key.split('.')
+            attachmentError.value[index] = errors[key]
+        }
+    }
+    console.log(errors)
+}
+
 async function onChooseAttach($event) {
+    showExtensionsText.value = false;
     for (const file of $event.target.files) {
+        let parts = file.name.split('.')
+        let ext = parts.pop().toLowerCase()
+
+        if (!attachmentExtensions.includes(ext)) {
+            showExtensionsText.value = true;
+        }
         const myFile = {
             file,
             url: await readFile(file)
@@ -148,14 +186,19 @@ function undoDelete(myFile) {
                                     <PostUserHeader :post="post" :show-time="false" class="mb-4" />
                                     <ckeditor :editor="editor" v-model="form.body" :config="editorConfig"></ckeditor>
 
+                                    <div v-if="showExtensionsText" class="border-l-4 border-sky-500 py-2 px-3 bg-sky-100 mt-3 text-gray-800">
+                                        File format: <br>
+                                        <small>{{ attachmentExtensions.join(', ') }}</small>
+                                    </div>
                                     <div
                                         class="grid gap-3 my-3"
                                         :class="[
                                             computedAttachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
                                         ]">
-                                        <template v-for="(myFile, ind) of computedAttachments">
+                                        <div v-for="(myFile, ind) of computedAttachments">
                                             <div
-                                                class="group aspect-square bg-gray-100 flex flex-col items-center justify-center text-gray-500 relative">
+                                                class="group aspect-square bg-gray-100 flex flex-col items-center justify-center text-gray-500 relative border-2"
+                                                :class="attachmentError[ind] ? 'border-red-500' : ''">
 
                                                 <div
                                                     v-if="myFile.deleted"
@@ -179,7 +222,7 @@ function undoDelete(myFile) {
                                                     class="object-contain aspect-square"
                                                     :class="myFile.deleted ? 'opacity-50' : ''" />
                                                 <div v-else
-                                                    class="flex flex-col justify-center items-center"
+                                                    class="flex flex-col justify-center items-center px-3"
                                                     :class="myFile.deleted ? 'opacity-50' : ''">
                                                     <PaperClipIcon class="size-10 mb-3" />
 
@@ -189,7 +232,8 @@ function undoDelete(myFile) {
                                                     </small>
                                                 </div>
                                             </div>
-                                        </template>
+                                            <small class="text-red-500">{{ attachmentError[ind] }}</small>
+                                        </div>
                                     </div>
                                 </div>
 

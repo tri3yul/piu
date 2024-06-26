@@ -103,10 +103,12 @@ function openAttachment(ind) {
                         +{{ post.attachments.length - 4 }} more
                     </div>
 
-                    <a :href="route('post.download', attachment)"
+                    <!-- Download -->
+                    <a @click.stop :href="route('post.download', attachment)"
                         class="z-20 opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-blue-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-blue-800">
                         <ArrowDownTrayIcon class="size-4" />
                     </a>
+                    <!--/ Download -->
 
                     <img v-if="isImage(attachment)" :src="attachment.url"
                         class="object-contain aspect-square" />
