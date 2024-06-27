@@ -143,12 +143,12 @@ function sendReaction() {
                 <span class="mr-2">{{ post.num_of_reactions }}</span>
                 {{ post.current_user_has_reaction ? 'Unlike' : 'Like' }}
             </button>
-            <button
+            <!-- <button
                 class="text-gray-800 flex gap-1 items-center justify-center bg-blue-100 rounded-lg hover:bg-blue-200 py-2 px-4 flex-1">
                 <ChatBubbleOvalLeftIcon class="size-5 mr-2" />
 
                 Comment
-            </button>
+            </button> -->
         </div>
     </div>
 </template>
