@@ -2,6 +2,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import GroupListItem from '@/Components/app/GroupListItem.vue';
 
+defineProps({
+    groups: Array
+})
+
 </script>
 
 <template>
@@ -20,7 +24,7 @@ import GroupListItem from '@/Components/app/GroupListItem.vue';
                     </div>
                 </DisclosureButton>
                 <DisclosurePanel>
-                    <GroupListItem />
+                    <GroupListItem :groups="groups" />
                 </DisclosurePanel>
             </Disclosure>
         </div>
@@ -29,7 +33,7 @@ import GroupListItem from '@/Components/app/GroupListItem.vue';
                 <h2 class="text-xl font-bold">My Groups</h2>
 
             </div>
-            <GroupListItem />
+            <GroupListItem :groups="groups" />
         </div>
     </div>
 </template>

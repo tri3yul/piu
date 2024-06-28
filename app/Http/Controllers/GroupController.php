@@ -39,6 +39,8 @@ class GroupController extends Controller
         ];
 
         GroupUser::create($groupUserData);
+        $group->status = $groupUserData['status'];
+        $group->role_group = $groupUserData['role_group'];
 
         return response(new GroupResource($group), 201);
     }
