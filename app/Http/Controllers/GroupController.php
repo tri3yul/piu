@@ -10,15 +10,23 @@ use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Resources\GroupResource;
 use App\Models\GroupUser;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GroupController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function profile(Group $group)
     {
-        //
+        $group->load('currentUserGroup');
+
+        return Inertia::render('Group/View', [
+            'success' => session('success'),
+            'group' => new GroupResource($group),
+        ]);
     }
 
     /**
@@ -67,5 +75,44 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         //
+    }
+
+    public function updateImage(Request $request, Group $group)
+    {
+        if (!$group->isAdminGroup(Auth::id())) {
+            return response("Permission denied", 403);
+        }
+
+        $data = $request->validate([
+            'cover' => ['nullable', 'image'],
+            'thumbnail' => ['nullable', 'image']
+        ]);
+
+        $cover = $data['cover'] ?? null;
+        $thumbnail = $data['thumbnail'] ?? null;
+
+        $success = '';
+
+        if ($cover) {
+            if ($group->cover_path) {
+                Storage::disk('public')->delete($group->cover_path);
+            }
+            $path = $cover->store('group-'.$group->id, 'public');
+            $group->update(['cover_path' => $path]);
+            $success = 'Cover updated';
+        }
+
+        if ($thumbnail) {
+            if ($group->thumbnail_path) {
+                Storage::disk('public')->delete($group->thumbnail_path);
+            }
+            $path = $thumbnail->store('group-'.$group->id, 'public');
+            $group->update(['thumbnail_path' => $path]);
+            $success = 'Thumbnail updated';
+        }
+
+        // session('succes', 'Cover Updated');
+
+        return back()->with('success', $success);
     }
 }
