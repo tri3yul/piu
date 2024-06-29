@@ -1,5 +1,5 @@
 <script setup>
-import FollowingItem from '@/Components/app/FollowingItem.vue';
+import UserListItem from '@/Components/app/UserListItem.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref } from 'vue';
 
@@ -13,42 +13,6 @@ const searchKeyword = ref('');
             You don't have following yet.
         </div>
         <div v-else>
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim JIng In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
-            <FollowingItem image="https://picsum.photos/100" title="Kim Ping In"
-                description="Lorem ipsum dolor sit amet, consectetur adipisicing elit." />
         </div>
     </div>
 </template>
