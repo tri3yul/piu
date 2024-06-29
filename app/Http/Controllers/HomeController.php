@@ -13,7 +13,7 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
-    public function index (Request $request)
+    public function index(Request $request)
     {
         $userId = Auth::id();
         $posts = Post::query()
@@ -22,7 +22,7 @@ class HomeController extends Controller
                 $query->where('user_id', $userId);
             }])
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         $posts = PostResource::collection($posts);
         if ($request->wantsJson()) {
