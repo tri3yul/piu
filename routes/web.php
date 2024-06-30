@@ -23,6 +23,11 @@ Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approv
 Route::middleware('auth')->group(function () {
     Route::post('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.updateImages');
 
+    //groups
+    Route::post('/group', [GroupController::class, 'store'])->name('group.create');
+
+    Route::put('/group/{group:slug}', [GroupController::class, 'update'])->name('group.update');
+
     Route::post('/group/update-image/{group:slug}', [GroupController::class, 'updateImage'])->name('group.updateImages');
 
     Route::post('/group/invite/{group:slug}', [GroupController::class, 'inviteUsers'])->name('group.inviteUsers');
@@ -43,9 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
     Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
     Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
-
-    //groups
-    Route::post('/group', [GroupController::class, 'store'])->name('group.create');
 });
 
 require __DIR__ . '/auth.php';
