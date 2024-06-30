@@ -138,6 +138,20 @@ function rejectUser(user) {
     })
 }
 
+function deleteUser(user) {
+    if (!window.confirm('Remove user "${user.name}" from group?')) {
+        return false;
+    }
+
+    const form = useForm({
+        user_id: user.id,
+    })
+
+    form.delete(route('group.removeUser', props.group.slug), {
+        preserveScroll: true
+    })
+}
+
 function onRoleChange(user, role_group) {
     console.log(user, role_group)
     const form = useForm({
@@ -295,7 +309,7 @@ function updateGroup() {
                                 <UserListItem v-for="user of users" :user="user" :key="user.id"
                                     :show-role-dropdown="isCurrentUserAdmin"
                                     :disable-role-dropdown="group.user_id === user.id" class="shadow rounded-lg"
-                                    @role-change="onRoleChange" />
+                                    @role-change="onRoleChange" @delete="deleteUser" />
                             </div>
                         </TabPanel>
                         <TabPanel v-if="isCurrentUserAdmin" class="">

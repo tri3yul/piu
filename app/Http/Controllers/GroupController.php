@@ -20,6 +20,7 @@ use App\Notifications\InvitationInGroup;
 use App\Notifications\RequestApproved;
 use App\Notifications\RequestToJoinGroup;
 use App\Notifications\RoleChanged;
+use App\Notifications\UserRemovedFromGroup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -281,6 +282,36 @@ class GroupController extends Controller
         return back();
     }
 
+    public function removeUser(Request $request, Group $group)
+    {
+        if (!$group->isAdminGroup(Auth::id())) {
+            return response("Permission denied", 403);
+        }
+
+        $data = $request->validate([
+            'user_id' => ['required'],
+        ]);
+
+        $user_id = $data['user_id'];
+
+        if ($group->isOwner($user_id)) {
+            return response("Can't removed of the group owner", 403);
+        }
+
+        $groupUser = GroupUser::where('user_id', $user_id)
+            ->where('group_id', $group->id)
+            ->first();
+
+        if ($groupUser) {
+            $user = $groupUser->user;
+            $groupUser->delete();
+
+            $user->notify(new UserRemovedFromGroup($group));
+        }
+
+        return back();
+    }
+
     public function changeRole(Request $request, Group $group)
     {
         if (!$group->isAdminGroup(Auth::id())) {
@@ -307,8 +338,8 @@ class GroupController extends Controller
             $groupUser->save();
 
             $groupUser->user->notify(new RoleChanged($group, $data['role_group']));
-
-            return back();
         }
+
+        return back();
     }
 }
