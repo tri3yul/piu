@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class UserResource extends JsonResource
+class GroupUserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,13 +18,10 @@ class UserResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "email" => $this->email,
-            "email_verified_at" => $this->email_verified_at,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at,
+            "role_group" => $this->role_group,
+            "status" => $this->status,
+            "group_id" => $this->group_id,
             "username" => $this->username,
-            "role_as" => $this->role_as,
-            "cover_url" => $this->cover_path ? Storage::url($this->cover_path) : null,
             "avatar_url" => $this->avatar_path ? Storage::url($this->avatar_path) : null,
         ];
     }

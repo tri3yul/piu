@@ -40,7 +40,7 @@ const props = defineProps({
     requests: Array,
 });
 
-function onCoverChange (event) {
+function onCoverChange(event) {
     imageForm.cover = event.target.files[0]
     if (imageForm.cover) {
         const reader = new FileReader()
@@ -51,7 +51,7 @@ function onCoverChange (event) {
     }
 }
 
-function onThumbnailChange (event) {
+function onThumbnailChange(event) {
     imageForm.thumbnail = event.target.files[0]
     if (imageForm.thumbnail) {
         const reader = new FileReader()
@@ -62,18 +62,19 @@ function onThumbnailChange (event) {
     }
 }
 
-function resetCoverImage () {
+function resetCoverImage() {
     imageForm.cover = null;
     coverImageSrc.value = null;
 }
 
-function resetThumbnailImage () {
+function resetThumbnailImage() {
     imageForm.thumbnail = null;
     thumbnailImageSrc.value = null;
 }
 
-function submitCoverImage () {
+function submitCoverImage() {
     imageForm.post(route('group.updateImages', props.group.slug), {
+        preserveScroll: true,
         onSuccess: () => {
             showNotification.value = true;
             resetCoverImage()
@@ -84,8 +85,9 @@ function submitCoverImage () {
     });
 }
 
-function submitThumbnailImage () {
+function submitThumbnailImage() {
     imageForm.post(route('group.updateImages', props.group.slug), {
+        preserveScroll: true,
         onSuccess: () => {
             showNotification.value = true;
             resetThumbnailImage()
@@ -99,7 +101,9 @@ function submitThumbnailImage () {
 function joinToGroup() {
     const form = useForm({})
 
-    form.post(route('group.join', props.group.slug))
+    form.post(route('group.join', props.group.slug), {
+        preserveScroll: true
+    })
 }
 
 function approveUser(user) {
@@ -108,7 +112,9 @@ function approveUser(user) {
         action: 'approve'
     })
 
-    form.post(route('group.approveRequest', props.group.slug))
+    form.post(route('group.approveRequest', props.group.slug), {
+        preserveScroll: true
+    })
 }
 
 function rejectUser(user) {
@@ -117,7 +123,21 @@ function rejectUser(user) {
         action: 'reject'
     })
 
-    form.post(route('group.approveRequest', props.group.slug))
+    form.post(route('group.approveRequest', props.group.slug), {
+        preserveScroll: true
+    })
+}
+
+function onRoleChange(user, role_group) {
+    console.log(user, role_group)
+    const form = useForm({
+        user_id: user.id,
+        role_group
+    })
+
+    form.post(route('group.changeRole', props.group.slug), {
+        preserveScroll: true
+    })
 }
 
 </script>
@@ -248,7 +268,9 @@ function rejectUser(user) {
 
                             <div class="grid grid-cols-2 gap-3">
                                 <UserListItem v-for="user of users" :user="user" :key="user.id"
-                                    class="shadow rounded-lg" />
+                                    :show-role-dropdown="isCurrentUserAdmin"
+                                    :disable-role-dropdown="group.user_id === user.id" class="shadow rounded-lg"
+                                    @role-change="onRoleChange" />
                             </div>
                         </TabPanel>
                         <TabPanel v-if="isCurrentUserAdmin" class="">
@@ -272,6 +294,4 @@ function rejectUser(user) {
     <InviteUserModal v-model="showInviteUserModal" />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

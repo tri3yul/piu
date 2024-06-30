@@ -7,55 +7,58 @@ defineProps({
     forApprove: {
         type: Boolean,
         default: false
+    },
+    showRoleDropdown: {
+        type: Boolean,
+        default: false
+    },
+    disableRoleDropdown: {
+        type: Boolean,
+        default: false
     }
 });
 
-defineEmits(['approve'])
+defineEmits(['approve', 'reject', 'roleChange'])
 
 </script>
 
 <template>
-    <div
-        class="cursor-pointer bg-white transition-all border-2 border-transparent hover:border-blue-500"
-    >
-        <Link
-            :href="route('profile', user.username)"
-            class="flex items-center gap-2 py-2 px-2"
-        >
-            <img :src="user.avatar_url || '/img/avatar-1.webp'"
-                class="w-[32px] rounded-full" />
+    <div class="bg-white transition-all border-2 border-transparent hover:border-blue-500">
+        <div class="flex items-center gap-2 py-2 px-2">
+            <Link :href="route('profile', user.username)">
+            <img :src="user.avatar_url || '/img/avatar-1.webp'" class="w-[32px] rounded-full" />
+            </Link>
 
             <div class="flex justify-between flex-1">
-                <h3
-                    class="font-black"
-                >
+                <Link :href="route('profile', user.username)">
+                <h3 class="font-black hover:underline">
                     {{ user.name }}
                 </h3>
+                </Link>
 
-                <div
-                    class="flex gap-1"
-                >
-                    <button
-                        v-if="forApprove"
-                        @click.prevent.stop="$emit('approve', user)"
-                        class="text-xs py-1 px-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
-                    >
+                <div v-if="forApprove" class="flex gap-1">
+                    <button @click.prevent.stop="$emit('approve', user)"
+                        class="text-xs py-1 px-2 rounded bg-blue-500 hover:bg-blue-600 text-white">
                         approve
                     </button>
 
-                    <button
-                        v-if="forApprove"
-                        @click.prevent.stop="$emit('reject', user)"
-                        class="text-xs py-1 px-2 rounded bg-red-500 hover:bg-red-600 text-white"
-                    >
+                    <button @click.prevent.stop="$emit('reject', user)"
+                        class="text-xs py-1 px-2 rounded bg-red-500 hover:bg-red-600 text-white">
                         reject
                     </button>
                 </div>
+
+                <div v-if="showRoleDropdown">
+                    <select @change="$emit('roleChange', user, $event.target.value)"
+                        class="rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 max-w-xs text-sm leading-6"
+                        :disabled="disableRoleDropdown">
+                        <option :selected="user.role_group === 'admin'">admin</option>
+                        <option :selected="user.role_group === 'user'">user</option>
+                    </select>
+                </div>
             </div>
-        </Link>
+        </div>
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

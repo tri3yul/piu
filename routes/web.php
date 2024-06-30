@@ -31,19 +31,21 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/group/approve-request/{group:slug}', [GroupController::class, 'approveRequest'])->name('group.approveRequest');
 
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/group/change-role/{group:slug}', [GroupController::class, 'changeRole'])->name('group.changeRole');
 
-     //posts
-     Route::post('/post', [PostController::class, 'store'])->name('post.create');
-     Route::put('/post/{post}', [PostController::class, 'update'])->name('post.update');
-     Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-     Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
-     Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
+    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-     //groups
-     Route::post('/group', [GroupController::class, 'store'])->name('group.create');
+    //posts
+    Route::post('/post', [PostController::class, 'store'])->name('post.create');
+    Route::put('/post/{post}', [PostController::class, 'update'])->name('post.update');
+    Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+    Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
+    Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
+
+    //groups
+    Route::post('/group', [GroupController::class, 'store'])->name('group.create');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

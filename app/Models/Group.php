@@ -22,7 +22,7 @@ class Group extends Model
 
     protected $fillable = ['name', 'user_id', 'auto_approval', 'about', 'cover_path', 'thumbnail_path'];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom(['name'])
@@ -30,28 +30,37 @@ class Group extends Model
             ->doNotGenerateSlugsOnUpdate();
     }
 
-    public function currentUserGroup() : HasOne
+    public function currentUserGroup(): HasOne
     {
         return $this->hasOne(GroupUser::class)->where('user_id', Auth::id());
     }
 
     public function isAdminGroup($userId): bool
     {
-        return $this->currentUserGroup?->user_id == $userId;
+        return GroupUser::query()
+            ->where('user_id', $userId)
+            ->where('group_id', $this->id)
+            ->where('role_group', GroupUserRole::ADMIN->value)
+            ->exists();
     }
 
-    public function adminUsers() : BelongsToMany
+    public function isOwner($userId): bool
+    {
+        return $this->user_id == $userId;
+    }
+
+    public function adminUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_users')->wherePivot('role_group', GroupUserRole::ADMIN->value);
     }
 
-    public function pendingUsers() : BelongsToMany
+    public function pendingUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_users')
             ->wherePivot('status', GroupUserStatus::PENDING->value);
     }
 
-    public function approvedUsers() : BelongsToMany
+    public function approvedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_users')
             ->wherePivot('status', GroupUserStatus::APPROVED->value);

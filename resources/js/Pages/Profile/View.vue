@@ -37,7 +37,7 @@ const props = defineProps({
     }
 });
 
-function onCoverChange (event) {
+function onCoverChange(event) {
     imageForm.cover = event.target.files[0]
     if (imageForm.cover) {
         const reader = new FileReader()
@@ -48,7 +48,7 @@ function onCoverChange (event) {
     }
 }
 
-function onAvatarChange (event) {
+function onAvatarChange(event) {
     imageForm.avatar = event.target.files[0]
     if (imageForm.avatar) {
         const reader = new FileReader()
@@ -59,18 +59,19 @@ function onAvatarChange (event) {
     }
 }
 
-function cancelCoverImage () {
+function cancelCoverImage() {
     imageForm.cover = null;
     coverImageSrc.value = null;
 }
 
-function resetAvatarImage () {
+function resetAvatarImage() {
     imageForm.avatar = null;
     avatarImageSrc.value = null;
 }
 
-function submitCoverImage () {
+function submitCoverImage() {
     imageForm.post(route('profile.updateImages'), {
+        preserveScroll: true,
         onSuccess: () => {
             showNotification.value = true;
             cancelCoverImage()
@@ -81,8 +82,9 @@ function submitCoverImage () {
     });
 }
 
-function submitAvatarImage () {
+function submitAvatarImage() {
     imageForm.post(route('profile.updateImages'), {
+        preserveScroll: true,
         onSuccess: () => {
             showNotification.value = true;
             resetAvatarImage()
@@ -140,8 +142,7 @@ function submitAvatarImage () {
                 </div>
                 <div class="flex">
                     <div
-                        class="flex items-center justify-center relative group/avatar ml-[48px] -mt-[64px] w-[128px] h-[128px] rounded-full"
-                    >
+                        class="flex items-center justify-center relative group/avatar ml-[48px] -mt-[64px] w-[128px] h-[128px] rounded-full">
                         <img :src="avatarImageSrc || user.avatar_url || '/img/avatar-1.webp'"
                             class="w-full h-full object-cover rounded-full" />
                         <button v-if="!avatarImageSrc"
@@ -151,8 +152,7 @@ function submitAvatarImage () {
                             <input type="file" class="absolute left-0 top-0 bottom-0 right-0 opacity-0"
                                 @change="onAvatarChange" />
                         </button>
-                        <div v-else
-                            class="absolute top-1 right-0 flex flex-col gap-2">
+                        <div v-else class="absolute top-1 right-0 flex flex-col gap-2">
                             <button @click="resetAvatarImage"
                                 class="size-7 flex items-center justify-center bg-red-500/80 text-white rounded-full">
                                 <XMarkIcon class="size-3" />
@@ -215,6 +215,4 @@ function submitAvatarImage () {
     </AuthenticatedLayout>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
