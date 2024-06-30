@@ -4,7 +4,7 @@ import PostModal from '@/Components/app/PostModal.vue'
 import AttachmentPreviewModal from '@/Components/app/AttachmentPreviewModal.vue'
 import axiosClient from "@/axiosClient.js";
 import { usePage } from '@inertiajs/vue3';
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, onUpdated, ref, watch } from 'vue';
 
 const page = usePage();
 
@@ -16,13 +16,23 @@ const previewAttachmentsPost = ref({})
 const loadMoreIntersect = ref(null)
 
 const allPosts = ref({
-    data: page.props.posts.data,
-    next: page.props.posts.links.next
+    data: [],
+    next: null
 })
 
 const props = defineProps({
     posts: Array
 })
+
+watch(() => page.props.posts, () => {
+    if (page.props.posts) {
+        allPosts.value = {
+            data: page.props.posts.data,
+            next: page.props.posts.links.next
+        }
+    }
+
+}, {deep: true, immediate: true})
 
 function openEditModal(post) {
     editPost.value = post;
@@ -51,11 +61,18 @@ function loadMore() {
     }
 
     axiosClient.get(allPosts.value.next)
-        .then(({data}) => {
+        .then(({ data }) => {
             allPosts.value.data = [...allPosts.value.data, ...data.data]
             allPosts.value.next = data.links.next
         })
 }
+
+// onUpdated(() => {
+//     allPosts.value = {
+//         data: page.props.posts.data,
+//         next: page.props.posts.links.next
+//     }
+// })
 
 onMounted(() => {
     const observer = new IntersectionObserver(

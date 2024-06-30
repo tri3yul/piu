@@ -25,7 +25,7 @@ class UserResource extends JsonResource
             "username" => $this->username,
             "role_as" => $this->role_as,
             "cover_url" => $this->cover_path ? Storage::url($this->cover_path) : null,
-            "avatar_url" => $this->avatar_path ? Storage::url($this->avatar_path) : null,
+            "avatar_url" => $this->avatar_path ? Storage::url($this->avatar_path) : '/img/avatar-1.webp',
         ];
     }
 }

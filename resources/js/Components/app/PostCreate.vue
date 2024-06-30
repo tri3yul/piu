@@ -12,6 +12,13 @@ const newPost = ref({
     user: authUser
 })
 
+defineProps({
+    group: {
+        type: Object,
+        default: null
+    }
+})
+
 function showCreatePostModal() {
     showModal.value = true
 }
@@ -21,14 +28,11 @@ function showCreatePostModal() {
 <template>
     <div class="p-4 bg-white rounded-lg border mb-3">
         <div @click="showCreatePostModal"
-            class="py-2 px-3 border-2 border-blue-300 text-gray-600 rounded-md mb-3 w-full"
-        >
+            class="py-2 px-3 border-2 border-blue-300 text-gray-600 rounded-md mb-3 w-full">
             Click to create post
         </div>
-        <PostModal :post="newPost" v-model="showModal" />
+        <PostModal :post="newPost" :group="group" v-model="showModal" />
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

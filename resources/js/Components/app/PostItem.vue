@@ -34,10 +34,10 @@ function sendReaction() {
     axiosClient.post(route('post.reaction', props.post), {
         reaction: 'like'
     })
-    .then(({data}) => {
-        props.post.current_user_has_reaction = data.current_user_has_reaction
-        props.post.num_of_reactions = data.num_of_reactions;
-    })
+        .then(({ data }) => {
+            props.post.current_user_has_reaction = data.current_user_has_reaction
+            props.post.num_of_reactions = data.num_of_reactions;
+        })
 }
 
 </script>
@@ -63,18 +63,18 @@ function sendReaction() {
                         <div class="px-1 py-1">
                             <MenuItem v-slot="{ active }">
                             <button @click="openEditModal" :class="[
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900',
-                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                                ]">
+                                active ? 'bg-blue-500 text-white' : 'text-gray-900',
+                                'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                            ]">
                                 <PencilIcon class="mr-2 h-5 w-5" aria-hidden="true" />
                                 Edit
                             </button>
                             </MenuItem>
                             <MenuItem v-slot="{ active }">
                             <button @click="deletePost" :class="[
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900',
-                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                                ]">
+                                active ? 'bg-blue-500 text-white' : 'text-gray-900',
+                                'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                            ]">
                                 <TrashIcon class="mr-2 h-5 w-5" aria-hidden="true" />
                                 Delete
                             </button>
@@ -99,17 +99,14 @@ function sendReaction() {
                 </template>
             </Disclosure>
         </div>
-        <div
-            class="grid gap-3 mb-3"
-            :class="[
-                post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
-            ]">
+        <div class="grid gap-3 mb-3" :class="[
+            post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+        ]">
             <template v-for="(attachment, ind) of post.attachments.slice(0, 4)">
                 <div @click="openAttachment(ind)"
                     class="group aspect-square bg-gray-100 flex flex-col items-center justify-center text-gray-500 relative cursor-pointer">
 
-                    <div
-                        v-if="ind === 3 && post.attachments.length > 4"
+                    <div v-if="ind === 3 && post.attachments.length > 4"
                         class="absolute left-0 top-0 right-0 bottom-0 z-10 bg-black/60 text-white flex items-center justify-center text-2xl">
                         +{{ post.attachments.length - 4 }} more
                     </div>
@@ -121,10 +118,8 @@ function sendReaction() {
                     </a>
                     <!--/ Download -->
 
-                    <img v-if="isImage(attachment)" :src="attachment.url"
-                        class="object-contain aspect-square" />
-                    <div v-else
-                        class="flex flex-col justify-center items-center">
+                    <img v-if="isImage(attachment)" :src="attachment.url" class="object-contain aspect-square" />
+                    <div v-else class="flex flex-col justify-center items-center">
                         <PaperClipIcon class="size-10 mb-3" />
 
                         <small>{{ attachment.name }}</small>
@@ -133,10 +128,8 @@ function sendReaction() {
             </template>
         </div>
         <div class="flex gap-2">
-            <button
-                @click="sendReaction"
-                class="text-gray-800 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1"
-                :class="[
+            <button @click="sendReaction"
+                class="text-gray-800 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1" :class="[
                     post.current_user_has_reaction ? 'bg-gray-100 hover:bg-gray-200' : 'bg-blue-100 hover:bg-blue-200'
                 ]">
                 <HandThumbUpIcon class="size-5" />

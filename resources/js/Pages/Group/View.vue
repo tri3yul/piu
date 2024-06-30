@@ -10,6 +10,8 @@ import GroupForm from '@/Components/app/GroupForm.vue'
 import Edit from '@/Pages/Profile/Edit.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InviteUserModal from '@/Pages/Group/InviteUserModal.vue';
+import PostList from '@/Components/app/PostList.vue';
+import PostCreate from '@/Components/app/PostCreate.vue';
 import { usePage } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
 
@@ -37,6 +39,7 @@ const props = defineProps({
     group: {
         type: Object
     },
+    posts: Object,
     users: Array,
     requests: Array,
 });
@@ -274,8 +277,14 @@ function updateGroup() {
                     </TabList>
 
                     <TabPanels class="mt-2">
-                        <TabPanel class="bg-white p-3 shadow">
-                            Post
+                        <TabPanel>
+                            <template v-if="posts">
+                                <PostCreate :group="group" />
+                                <PostList :posts="posts.data" class="flex-1" />
+                            </template>
+                            <div v-else class="py-8  text-center">
+                                Permission denied
+                            </div>
                         </TabPanel>
                         <TabPanel v-if="isJoinedToGroup">
                             <div class="mb-3">
