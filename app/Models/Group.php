@@ -44,8 +44,6 @@ class Group extends Model
             ->exists();
     }
 
-
-
     public function hasApprovedUser($userId): bool
     {
         return GroupUser::query()

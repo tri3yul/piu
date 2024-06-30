@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\PostAttachment;
 use App\Models\PostReaction;
+use App\Notifications\PostDeleted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -112,13 +113,17 @@ class PostController extends Controller
     {
         $id = Auth::id();
 
-        if ($post->user_id !== $id) {
-            return response("Permission denied", 403);
+        if ($post->isOwner($id) || $post->group && $post->group->isAdminGroup($id)) {
+            $post->delete();
+
+            if (!$post->isOwner($id)) {
+                $post->user->notify(new PostDeleted($post->group));
+            }
+
+            return back();
         }
 
-        $post->delete();
-
-        return back();
+        return response("Permission denied", 403);
     }
 
     public function downloadAttachment(PostAttachment $attachment)
