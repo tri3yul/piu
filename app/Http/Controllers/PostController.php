@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Enums\PostReactionEnum;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\PostAttachment;
 use App\Models\PostReaction;
@@ -17,6 +18,14 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+    public function view(Post $post)
+    {
+        $post->loadCount('reactions');
+        return inertia('Post/View', [
+            'post' => new PostResource($post)
+        ]);
+    }
+
     public function store(StorePostRequest $request)
     {
         $data = $request->validated();
