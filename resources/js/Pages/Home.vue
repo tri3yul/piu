@@ -29,10 +29,10 @@ function handleImageError() {
             <div class="lg:col-span-3 lg:order-1 h-full overflow-hidden">
                 <GroupList :groups="groups" />
             </div>
-            <div class="lg:col-span-3 lg:order-3 h-full overflow-hidden">
+            <!-- <div class="lg:col-span-3 lg:order-3 h-full overflow-hidden">
                 <FollowingList />
-            </div>
-            <div class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col">
+            </div> -->
+            <div class="lg:col-span-9 lg:order-2 h-full overflow-hidden flex flex-col">
                 <PostCreate />
                 <PostList :posts="posts.data" class="flex-1" />
             </div>
