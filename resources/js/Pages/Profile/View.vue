@@ -5,7 +5,8 @@ import { XMarkIcon, CheckCircleIcon, CameraIcon } from '@heroicons/vue/24/solid'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TabItem from '@/Pages/Profile/Partials/TabItem.vue';
 import Edit from '@/Pages/Profile/Edit.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PostList from "@/Components/app/PostList.vue";
+import PostCreate from '@/Components/app/PostCreate.vue';
 import { usePage } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
 
@@ -34,7 +35,8 @@ const props = defineProps({
     },
     user: {
         type: Object
-    }
+    },
+    posts: Object,
 });
 
 function onCoverChange(event) {
@@ -178,12 +180,12 @@ function submitAvatarImage() {
                         <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Post" :selected="selected" />
                         </Tab>
-                        <Tab v-slot="{ selected }" as="template">
+                        <!-- <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Follower" :selected="selected" />
                         </Tab>
                         <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Followings" :selected="selected" />
-                        </Tab>
+                        </Tab> -->
                         <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Photo" :selected="selected" />
                         </Tab>
@@ -193,15 +195,21 @@ function submitAvatarImage() {
                     </TabList>
 
                     <TabPanels class="mt-2">
-                        <TabPanel class="bg-white p-3 shadow">
-                            Post
+                        <TabPanel>
+                            <template v-if="posts">
+                                <PostCreate/>
+                                <PostList :posts="posts.data" class="flex-1"/>
+                            </template>
+                            <div v-else class="py-8 text-center dark:text-gray-100">
+                                Permission denied
+                            </div>
                         </TabPanel>
-                        <TabPanel class="bg-white p-3 shadow">
+                        <!-- <TabPanel class="bg-white p-3 shadow">
                             Follower
                         </TabPanel>
                         <TabPanel class="bg-white p-3 shadow">
                             Following
-                        </TabPanel>
+                        </TabPanel> -->
                         <TabPanel class="bg-white p-3 shadow">
                             Photo
                         </TabPanel>

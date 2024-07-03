@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Controllers\id;
+use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use App\Models\Post;
+use App\Models\PostAttachment;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -17,13 +20,30 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function index(User $user)
+    public function index(Request $request, User $user)
     {
+        $posts = Post::postsForTimeline(Auth::id())
+            ->where('user_id', $user->id)
+            ->paginate(10);
+
+        $posts = PostResource::collection($posts);
+
+        if ($request->wantsJson()) {
+            return $posts;
+        }
+
+        $attachments = PostAttachment::query()
+            ->where('mime', 'like', 'image/%')
+            ->where('created_by', $user->id)
+            ->latest()
+            ->get();
+
         return Inertia::render('Profile/View', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'success' => session('success'),
             'user' => new UserResource($user),
+            'posts' => $posts
         ]);
     }
 
