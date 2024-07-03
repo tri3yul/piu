@@ -79,7 +79,7 @@ function submit() {
                                 </div>
 
                                 <div class="flex justify-end gap-2 py-3 px-4">
-                                    <button
+                                    <button @click="closeModal"
                                         class="text-gray-800 flex gap-1 items-center justify-center bg-gray-100 rounded-md hover:bg-gray-200 py-2 px-4">
                                         <XMarkIcon class="size-5" />
                                         Cancel
