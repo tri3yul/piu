@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,6 +57,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])->name('post.download');
 
     Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])->name('post.reaction');
+
+    Route::get('/search/{search?}', [SearchController::class, 'search'])
+        ->name('search');
 });
 
 require __DIR__ . '/auth.php';
