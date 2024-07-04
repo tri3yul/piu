@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Controllers\id;
+use App\Http\Resources\PostAttachmentResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
@@ -32,7 +33,7 @@ class ProfileController extends Controller
             return $posts;
         }
 
-        $attachments = PostAttachment::query()
+        $photos = PostAttachment::query()
             ->where('mime', 'like', 'image/%')
             ->where('created_by', $user->id)
             ->latest()
@@ -43,7 +44,8 @@ class ProfileController extends Controller
             'status' => session('status'),
             'success' => session('success'),
             'user' => new UserResource($user),
-            'posts' => $posts
+            'posts' => $posts,
+            'photos' => PostAttachmentResource::collection($photos)
         ]);
     }
 

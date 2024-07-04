@@ -7,6 +7,7 @@ import TabItem from '@/Pages/Profile/Partials/TabItem.vue';
 import UserListItem from '@/Components/app/UserListItem.vue';
 import TextInput from '@/Components/TextInput.vue';
 import GroupForm from '@/Components/app/GroupForm.vue'
+import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 import Edit from '@/Pages/Profile/Edit.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InviteUserModal from '@/Pages/Group/InviteUserModal.vue';
@@ -42,6 +43,7 @@ const props = defineProps({
     posts: Object,
     users: Array,
     requests: Array,
+    photos: Array,
 });
 
 const aboutForm = useForm({
@@ -326,7 +328,7 @@ function updateGroup() {
                             </div>
                         </TabPanel>
                         <TabPanel class="bg-white p-3 shadow">
-                            Photo
+                            <TabPhotos :photos="photos" />
                         </TabPanel>
                         <TabPanel class="bg-white p-3 shadow">
                             <template v-if="isCurrentUserAdmin">

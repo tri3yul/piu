@@ -9,6 +9,7 @@ import PostList from "@/Components/app/PostList.vue";
 import PostCreate from '@/Components/app/PostCreate.vue';
 import { usePage } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
+import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 
 const imageForm = useForm({
     avatar: null,
@@ -37,6 +38,7 @@ const props = defineProps({
         type: Object
     },
     posts: Object,
+    photos: Array
 });
 
 function onCoverChange(event) {
@@ -211,7 +213,7 @@ function submitAvatarImage() {
                             Following
                         </TabPanel> -->
                         <TabPanel class="bg-white p-3 shadow">
-                            Photo
+                            <TabPhotos :photos="photos" />
                         </TabPanel>
                         <TabPanel v-if="isMyProfile">
                             <Edit :must-verify-email="mustVerifyEmail" :status="status" />
