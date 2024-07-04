@@ -5,7 +5,7 @@ import { XMarkIcon, PaperClipIcon, ChevronLeftIcon, ChevronRightIcon } from '@he
 import PostUserHeader from '@/Components/app/PostUserHeader.vue';
 import { useForm } from '@inertiajs/vue3';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { isImage } from '@/helpers';
+import {isImage, isVideo} from "@/helpers.js";
 
 const props = defineProps({
     attachments: {
@@ -69,23 +69,26 @@ function next() {
                                 class="flex flex-col w-full transform overflow-hidden bg-blue-200 text-left align-middle shadow-xl transition-all">
 
                                 <button @click="closeModal"
-                                    class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-black">
+                                    class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-black z-40">
                                     <XMarkIcon class="size-6" />
                                 </button>
 
                                 <div class="relative group h-full">
                                     <div @click="prev"
-                                        class="absolute opacity-0 group-hover:opacity-100 text-black cursor-pointer flex items-center w-12 h-full left-0 bg-black/5">
+                                        class="absolute opacity-0 group-hover:opacity-100 text-black cursor-pointer flex items-center w-12 h-full left-0 bg-black/5 z-30">
                                         <ChevronLeftIcon class="w-16" />
                                     </div>
                                     <div @click="next"
-                                        class="absolute opacity-0 group-hover:opacity-100 text-black cursor-pointer flex items-center w-12 h-full right-0 bg-black/5">
+                                        class="absolute opacity-0 group-hover:opacity-100 text-black cursor-pointer flex items-center w-12 h-full right-0 bg-black/5 z-30">
                                         <ChevronRightIcon class="w-16" />
                                     </div>
 
                                     <div class="flex items-center justify-center w-full h-full p-3">
                                         <img v-if="isImage(attachment)" :src="attachment.url"
                                             class="max-w-full max-h-full" />
+                                        <div v-else-if="isVideo(attachment)" class="flex items-center">
+                                            <video :src="attachment.url" controls autoplay></video>
+                                        </div>
                                         <div v-else class="p-32 flex flex-col justify-center items-center text-black">
                                             <PaperClipIcon class="size-10 mb-3" />
 
