@@ -69,7 +69,7 @@ function next() {
                                 class="flex flex-col w-full transform overflow-hidden bg-blue-200 text-left align-middle shadow-xl transition-all">
 
                                 <button @click="closeModal"
-                                    class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-black z-40">
+                                    class="absolute right-3 top-3 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-black z-40">
                                     <XMarkIcon class="size-6" />
                                 </button>
 

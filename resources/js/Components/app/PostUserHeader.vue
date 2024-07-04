@@ -17,7 +17,7 @@ defineProps({
     <div class="flex items-center gap-2">
         <Link :href="route('profile', post.user.username)">
         <img :src="post.user.avatar_url"
-            class="w-[40px] rounded-full border border-2 transition-all hover:border-pink-500 object-cover" />
+            class="w-[40px] rounded-full border-2 transition-all hover:border-pink-500 object-cover" />
         </Link>
         <div>
             <h4 class="flex items-center font-bold">
